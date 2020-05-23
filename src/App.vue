@@ -1,8 +1,8 @@
 <template lang="html">
-  <div id="app" :class="typeof weather.main !='undefined' && backgroundDefine()" >
+  <div id="app" :class="typeof weather.main !='undefined' && chooseBackground()" >
     <main>
       <div class="search-box">
-        <input v-model="city" v-on:keypress="fetchWeather" type="text" class="search-bar" placeholder="Search..." />
+        <input class="search-bar" v-model="city" v-on:keypress="fetchTheWeather" type="text"  placeholder="Search..." />
         </div>
         <div>
       <weather-details v-if="typeof weather.main !='undefined'" :weather="weather"></weather-details>
@@ -21,8 +21,8 @@ export default {
   name:'app',
   data(){
     return{
-    api_key: '31423c45b9d32d686dff4fcd7e4aa4a0',
-    url_base: "https://api.openweathermap.org/data/2.5/",
+    key: '31423c45b9d32d686dff4fcd7e4aa4a0',
+    url: "https://api.openweathermap.org/data/2.5/",
     city: '',
     weather:{}
 
@@ -32,15 +32,15 @@ export default {
     'vue-map': VueMap
   },
   methods:{
-    fetchWeather(e){
-      if(e.key == "Enter"){
-        fetch(`${this.url_base}weather?q=${this.city}&units=metric&APPID=${this.api_key}`)
+    fetchTheWeather(event){
+      if(event.key == "Enter"){
+        fetch(`${this.url}weather?q=${this.city}&units=metric&APPID=${this.key}`)
         .then(res => res.json()).then(data => this.weather = data);
         this.city= ''
 
       }
     },
-    backgroundDefine: function(){
+    chooseBackground: function(){
       if (this.weather.weather[0].main === "Rain"){
         return 'rain';
       } else if (this.weather.weather[0].main === "Clear"){
